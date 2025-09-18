@@ -12,7 +12,6 @@ A modern, responsive web application that provides current weather information a
 - **Weather Alerts:** Visual alerts for extreme weather conditions (heat/cold).
 - **5-Day Forecast:** See a summarized forecast for the next 5 days.
 - **Responsive Design:** Works on desktop and mobile devices.
--
 
 ## Getting Started
 
@@ -25,8 +24,8 @@ A modern, responsive web application that provides current weather information a
 
 1. **Clone the repository:**
    ```sh
-   git clone <your-repo-url>
-   cd "Full stack projects/Weather forecast application"
+   git clone <https://github.com/Ritushree12/Weather-Forecast-Application.git>
+   cd "Weather forecast application"
    ```
 2. **Install dependencies:**
    ```sh
@@ -71,4 +70,4 @@ This project is for educational and personal use.
 
 ## GitHub Repository
 
-[View on GitHub](https://github.com/your-username/weather-forecast-application)
+[View on GitHub](https://github.com/Ritushree12/Weather-Forecast-Application)
