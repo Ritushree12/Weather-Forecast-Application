@@ -357,7 +357,7 @@ function renderDropdown() {
 inputCity.addEventListener("change", function () {
   const city = inputCity.value.trim(); // remove extra spaces
   CITY_NAME = city;
-  if (!city) {
+  if (!city || city.length === 0 || city === "") {
     errorMsg.style.visibility = "visible";
     errorMsg.innerText = "Please enter a city name!";
     resultContainer.classList.add("hidden");
@@ -371,9 +371,38 @@ inputCity.addEventListener("change", function () {
 
   // Hide previous error
   errorMsg.style.visibility = "hidden";
+  errorMsg.innerText = "";
 
   // Fetch weather only for valid input
   getWeather(city);
+});
+
+inputCity.addEventListener("keydown", function (event) {
+  // Check if the pressed key is "Enter"
+  if (event.key === "Enter") {
+    dropdown.classList.add("hidden");
+    dropdown.style.display = "none";
+    const city = inputCity.value.trim();
+    CITY_NAME = city;
+
+    if (city === "") {
+      // Show error if input is empty
+      errorMsg.style.visibility = "visible";
+      errorMsg.innerText = "Please enter a city name!";
+      resultContainer.classList.add("hidden");
+      overlay.classList.add("hidden");
+      unitToggle.classList.add("hidden");
+      container.classList.add("hidden");
+      return;
+    }
+
+    // Hide error if input is valid
+    errorMsg.style.visibility = "hidden";
+    errorMsg.innerText = "";
+
+    // Call your weather function
+    getWeather(city);
+  }
 });
 
 // Render dropdown on load
