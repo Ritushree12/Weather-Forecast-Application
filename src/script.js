@@ -1,6 +1,7 @@
 //to change the background of the image
 let currentWeather = "";
 let CITY_NAME;
+
 // Map of weather to images
 const weatherImages = {
   Cloudy: [
@@ -99,8 +100,10 @@ function getWeather(CITY_NAME) {
     errorMsg.innerText = "Please enter a city name!";
     // resultContainer.style.visibility = "hidden";
     resultContainer.classList.add("hidden");
+    resultContainer.style.display = "none";
     overlay.classList.add("hidden");
     unitToggle.classList.add("hidden");
+    container.classList.add("hidden");
 
     return;
   }
@@ -116,8 +119,10 @@ function getWeather(CITY_NAME) {
         // city not found
         // resultContainer.style.visibility = "hidden";
         resultContainer.classList.add("hidden");
+        resultContainer.style.display = "none";
         overlay.classList.add("hidden");
         unitToggle.classList.add("hidden");
+        container.classList.add("hidden");
 
         errorMsg.style.visibility = "visible";
         errorMsg.innerText = "City not found! Please check the spelling.";
@@ -127,9 +132,13 @@ function getWeather(CITY_NAME) {
       // display results
       // resultContainer.style.visibility = "visible";
       resultContainer.classList.remove("hidden");
+      resultContainer.style.display = "flex";
       overlay.classList.remove("hidden");
       unitToggle.classList.remove("hidden");
       unitToggle.classList.add("flex");
+      container.classList.remove("hidden");
+      container.classList.add("flex");
+
       cityNameAsResult.innerText = data.name.toUpperCase();
       //minTemp.innerText = "Minimum Temperature: " + data.main.temp_min + " °C";
       //maxTemp.innerText = "Max Temperature:" + data.main.temp_max + " °C";
@@ -166,9 +175,13 @@ function getWeather(CITY_NAME) {
     .catch((error) => {
       // resultContainer.style.visibility = "hidden";
       resultContainer.classList.add("hidden");
+      resultContainer.style.display = "none";
+
       errorMsg.style.visibility = "visible";
       overlay.classList.add("hidden");
       unitToggle.classList.add("hidden");
+      container.classList.add("hidden");
+
       errorMsg.innerText =
         "Unable to fetch the weather currently. Please try again later.";
       console.error(error);
@@ -217,9 +230,13 @@ currentLocation.addEventListener("click", function () {
   if (navigator.geolocation) {
     // resultContainer.style.visibility = "visible";
     resultContainer.classList.remove("hidden");
+    resultContainer.style.display = "flex";
     overlay.classList.remove("hidden");
     unitToggle.classList.remove("hidden");
     unitToggle.classList.add("flex");
+    container.classList.remove("hidden");
+    container.classList.add("flex");
+
     errorMsg.style.visibility = "hidden";
     inputCity.value = ""; // Clear input field
 
@@ -241,16 +258,17 @@ function getWeatherByCoords(lat, lon) {
       errorMsg.style.visibility = "hidden";
       // resultContainer.style.visibility = "visible";
       resultContainer.classList.remove("hidden");
+      resultContainer.style.display = "flex";
       overlay.classList.remove("hidden");
       unitToggle.classList.remove("hidden");
       unitToggle.classList.add("flex");
+      container.classList.remove("hidden");
+      container.classList.add("flex");
 
       cityNameAsResult.innerText = data.name.toUpperCase();
-      // minTemp.innerText = "Minimum Temperature: " + data.main.temp_min + " °C";
-      //maxTemp.innerText = "Max Temperature:" + data.main.temp_max + " °C";
+
       humidity.innerText = "Humidity: " + data.main.humidity + " %";
       pressure.innerText = "Pressure: " + data.main.pressure + " hPa";
-      //temperature.innerText = "Temperature: " + data.main.temp + " °C";
       minTemp.innerText = `Minimum Temperature: ${data.main.temp_min} ${
         currentUnit === "metric" ? "°C" : "°F"
       }`;
@@ -272,11 +290,13 @@ function getWeatherByCoords(lat, lon) {
       checkWeatherAlert(data.main.temp);
     })
     .catch((err) => {
-      // resultContainer.style.visibility = "hidden";
       errorMsg.style.visibility = "visible";
       resultContainer.classList.add("hidden");
+      resultContainer.style.display = "none";
+
       overlay.classList.add("hidden");
       unitToggle.classList.add("hidden");
+      container.classList.add("hidden");
 
       errorMsg.innerText =
         "Unable to fetch the weather currently.Please try again later";
@@ -340,11 +360,12 @@ inputCity.addEventListener("change", function () {
   if (!city) {
     errorMsg.style.visibility = "visible";
     errorMsg.innerText = "Please enter a city name!";
-    // resultContainer.style.visibility = "hidden";
     resultContainer.classList.add("hidden");
+    resultContainer.style.display = "none";
 
     overlay.classList.add("hidden");
     unitToggle.classList.add("hidden");
+    container.classList.add("hidden");
     return; // stop execution
   }
 
@@ -356,7 +377,6 @@ inputCity.addEventListener("change", function () {
 });
 
 // Render dropdown on load
-
 document.addEventListener("DOMContentLoaded", function () {
   renderDropdown();
   // Ensure dropdown is hidden on initial load
@@ -373,26 +393,11 @@ inputCity.addEventListener("focus", function () {
     dropdown.style.display = "block";
   }
 });
-// inputCity.addEventListener("click", function () {
-//   let cities = JSON.parse(localStorage.getItem("recentCities")) || [];
-//   if (cities.length === 0) return; // no recent cities
-
-//   // Check if dropdown is currently visible
-//   const isVisible = !dropdown.classList.contains("hidden");
-
-//   if (isVisible) {
-//     dropdown.classList.add("hidden");
-//     dropdown.style.display = "none";
-//   } else {
-//     dropdown.classList.remove("hidden");
-//     dropdown.style.display = "block";
-//   }
-// });
 
 inputCity.addEventListener("blur", function () {
   setTimeout(() => {
     dropdown.classList.add("hidden");
-  }, 150); // Delay to allow click
+  }, 150);
 });
 
 document.addEventListener("click", (e) => {
@@ -488,9 +493,18 @@ function checkWeatherAlert(temp) {
 }
 
 //extended forecast
+const container = document.getElementById("forecast-container");
+container.classList.add("hidden");
+
 function displayForecast(dailyForecasts) {
-  const container = document.getElementById("forecast-container");
   container.innerHTML = "";
+
+  // Add heading dynamically
+  const heading = document.createElement("h1");
+  heading.innerText = "Forecast for 5 days:";
+  heading.className = "text-4xl text-center text-white w-full";
+  heading.style.textShadow = "1px 1px 4px rgba(255, 255, 255, 0.6)";
+  container.appendChild(heading);
 
   dailyForecasts.forEach((day) => {
     const card = document.createElement("div");
