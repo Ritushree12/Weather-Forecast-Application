@@ -77,11 +77,11 @@ function changeBackground() {
   const images = weatherImages[currentWeather];
   if (!images || images.length === 0) return;
   bgContainer.style.backgroundImage = `url('${images[index]}')`;
+  bgContainer.classList.add("shadow-xl");
   index = (index + 1) % images.length;
 }
 
 const API_KEY = "3ecfc6ce7cca0eb7e494dd29e6241ad4";
-//const url = `https://api.openweathermap.org/data/2.5/weather?q=${CITY_NAME}&appid=${API_KEY}&units=metric`;
 const cityNameAsResult = document.getElementById("city-name");
 const weatherDesc = document.getElementById("weather-desc");
 const minTemp = document.getElementById("min-temp");
@@ -135,11 +135,9 @@ function getWeather(CITY_NAME) {
       container.classList.add("flex");
 
       cityNameAsResult.innerText = data.name.toUpperCase();
-      //minTemp.innerText = "Minimum Temperature: " + data.main.temp_min + " °C";
-      //maxTemp.innerText = "Max Temperature:" + data.main.temp_max + " °C";
+
       humidity.innerText = "Humidity: " + data.main.humidity + " %";
       pressure.innerText = "Pressure: " + data.main.pressure + " hPa";
-      //temperature.innerText = "Temperature: " + data.main.temp + " °C";
       minTemp.innerText = `Minimum Temperature: ${data.main.temp_min} ${
         currentUnit === "metric" ? "°C" : "°F"
       }`;
