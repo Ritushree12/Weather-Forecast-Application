@@ -1,6 +1,7 @@
 //to change the background of the image
 let currentWeather = "";
 let CITY_NAME;
+let currentCitySelected = false;
 
 // Map of weather to images
 const weatherImages = {
@@ -98,7 +99,6 @@ function getWeather(CITY_NAME) {
   if (!CITY_NAME.trim()) {
     errorMsg.style.visibility = "visible";
     errorMsg.innerText = "Please enter a city name!";
-    // resultContainer.style.visibility = "hidden";
     resultContainer.classList.add("hidden");
     resultContainer.style.display = "none";
     overlay.classList.add("hidden");
@@ -109,15 +109,10 @@ function getWeather(CITY_NAME) {
   }
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${CITY_NAME}&appid=${API_KEY}&units=${currentUnit}`;
 
-  // const url = `https://api.openweathermap.org/data/2.5/weather?q=${CITY_NAME}&appid=${API_KEY}&units=metric`;
-
   fetch(url)
     .then((result) => result.json())
     .then((data) => {
-      console.log(data);
       if (+data.cod === 404) {
-        // city not found
-        // resultContainer.style.visibility = "hidden";
         resultContainer.classList.add("hidden");
         resultContainer.style.display = "none";
         overlay.classList.add("hidden");
@@ -126,11 +121,11 @@ function getWeather(CITY_NAME) {
 
         errorMsg.style.visibility = "visible";
         errorMsg.innerText = "City not found! Please check the spelling.";
+        showToast("City not found! Please check the spelling.");
         return;
       }
 
       // display results
-      // resultContainer.style.visibility = "visible";
       resultContainer.classList.remove("hidden");
       resultContainer.style.display = "flex";
       overlay.classList.remove("hidden");
@@ -184,7 +179,9 @@ function getWeather(CITY_NAME) {
 
       errorMsg.innerText =
         "Unable to fetch the weather currently. Please try again later.";
-      console.error(error);
+      showToast(
+        "Unable to fetch the weather currently. Please try again later."
+      );
     });
 }
 
@@ -228,7 +225,7 @@ const currentLocation = document.querySelector(".current-location");
 
 currentLocation.addEventListener("click", function () {
   if (navigator.geolocation) {
-    // resultContainer.style.visibility = "visible";
+    currentCitySelected = true;
     resultContainer.classList.remove("hidden");
     resultContainer.style.display = "flex";
     overlay.classList.remove("hidden");
@@ -242,17 +239,23 @@ currentLocation.addEventListener("click", function () {
 
     navigator.geolocation.getCurrentPosition(
       (pos) => getWeatherByCoords(pos.coords.latitude, pos.coords.longitude),
-      (err) => console.error(err)
+      (err) => {
+        showToast(err.message);
+      }
     );
   }
 });
 function getWeatherByCoords(lat, lon) {
-  //const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
   const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${currentUnit}`;
 
   fetch(url)
     .then((res) => res.json())
     .then((data) => {
+      if (data.cod === 404) {
+        showToast("City not found! Please check the spelling.");
+        return;
+      }
+
       inputCity.value = ""; // Clear input field
       dropdown.style.display = "none";
       errorMsg.style.visibility = "hidden";
@@ -286,7 +289,7 @@ function getWeatherByCoords(lat, lon) {
           .join(" ");
       let description = data.weather[0].description.toLowerCase();
       setBackground(description);
-      showForecast();
+      showForecastByCoords(data.coord.lat, data.coord.lon);
       checkWeatherAlert(data.main.temp);
     })
     .catch((err) => {
@@ -297,7 +300,7 @@ function getWeatherByCoords(lat, lon) {
       overlay.classList.add("hidden");
       unitToggle.classList.add("hidden");
       container.classList.add("hidden");
-
+      showToast("Unable to fetch weather currently. Please try again later.");
       errorMsg.innerText =
         "Unable to fetch the weather currently.Please try again later";
     });
@@ -340,6 +343,7 @@ function renderDropdown() {
     li.className =
       "px-4 py-2 hover:bg-gray-200 cursor-pointer text-sm transition";
     li.addEventListener("click", () => {
+      currentCitySelected = false;
       inputCity.value = city;
       CITY_NAME = city;
       dropdown.classList.add("hidden");
@@ -357,12 +361,13 @@ function renderDropdown() {
 inputCity.addEventListener("change", function () {
   const city = inputCity.value.trim(); // remove extra spaces
   CITY_NAME = city;
+  currentCitySelected = false;
   if (!city || city.length === 0 || city === "") {
     errorMsg.style.visibility = "visible";
     errorMsg.innerText = "Please enter a city name!";
+    showToast("Please enter a city name!");
     resultContainer.classList.add("hidden");
     resultContainer.style.display = "none";
-
     overlay.classList.add("hidden");
     unitToggle.classList.add("hidden");
     container.classList.add("hidden");
@@ -378,6 +383,7 @@ inputCity.addEventListener("change", function () {
 });
 
 inputCity.addEventListener("keydown", function (event) {
+  currentCitySelected = false;
   // Check if the pressed key is "Enter"
   if (event.key === "Enter") {
     dropdown.classList.add("hidden");
@@ -388,6 +394,7 @@ inputCity.addEventListener("keydown", function (event) {
     if (city === "") {
       // Show error if input is empty
       errorMsg.style.visibility = "visible";
+      showToast("Please enter a city name!");
       errorMsg.innerText = "Please enter a city name!";
       resultContainer.classList.add("hidden");
       overlay.classList.add("hidden");
@@ -461,7 +468,15 @@ function setUnit(unit) {
 
   // Update the weather if a city is already displayed
   const currentCity = cityNameAsResult.innerText;
-  if (currentCity) {
+
+  if (currentCitySelected && currentCity) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => getWeatherByCoords(pos.coords.latitude, pos.coords.longitude),
+      (err) => {
+        showToast(err.message);
+      }
+    );
+  } else if (currentCity) {
     getWeather(currentCity);
   }
 }
@@ -540,7 +555,7 @@ function displayForecast(dailyForecasts) {
     card.className = "card";
 
     card.innerHTML = `
-            <h3>${day.date}</h3>
+            <h3>Date: ${day.date}</h3>
             <img src="https://openweathermap.org/img/wn/${day.icon}@2x.png" alt="${day.description}">
             <p>Temp: ${day.temp}°C</p>
             <p>Wind: ${day.wind} m/s</p>
@@ -568,20 +583,34 @@ function displayForecast(dailyForecasts) {
   });
 }
 async function getForecast() {
-  const response = await fetch(
-    `https://api.openweathermap.org/data/2.5/forecast?q=${CITY_NAME}&appid=${API_KEY}&units=metric`
-  );
-  const data = await response.json();
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/forecast?q=${CITY_NAME}&appid=${API_KEY}&units=metric`
+    );
+    if (!response.ok) {
+      // If response status is not 2xx
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+    const data = await response.json();
+    if (data.cod && +data.cod !== 200) {
+      throw new Error(data.message || "Unable to fetch forecast");
+    }
 
-  // Group by date
-  const forecastByDay = {};
-  data.list.forEach((item) => {
-    const date = item.dt_txt.split(" ")[0];
-    if (!forecastByDay[date]) forecastByDay[date] = [];
-    forecastByDay[date].push(item);
-  });
+    // Group by date
+    const forecastByDay = {};
+    data.list.forEach((item) => {
+      const date = item.dt_txt.split(" ")[0];
+      if (!forecastByDay[date]) forecastByDay[date] = [];
+      forecastByDay[date].push(item);
+    });
 
-  return forecastByDay;
+    return forecastByDay;
+  } catch (err) {
+    // Display error in UI
+    showToast(err.message);
+
+    return [];
+  }
 }
 function getDailySummary(forecastByDay) {
   const dailyForecasts = [];
@@ -611,4 +640,54 @@ async function showForecast() {
   const forecastByDay = await getForecast();
   const dailyForecasts = getDailySummary(forecastByDay);
   displayForecast(dailyForecasts);
+}
+
+// Show forecast for current user location
+async function getForecastByCoords(lat, lon) {
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+    );
+    const data = await response.json();
+
+    // Group by date
+    const forecastByDay = {};
+    data.list.forEach((item) => {
+      const date = item.dt_txt.split(" ")[0];
+      if (!forecastByDay[date]) forecastByDay[date] = [];
+      forecastByDay[date].push(item);
+    });
+
+    return forecastByDay;
+  } catch (error) {
+    showToast("Unable to fetch forecast for current location.");
+    return {};
+  }
+}
+
+async function showForecastByCoords(lat, lon) {
+  const forecastByDay = await getForecastByCoords(lat, lon);
+  const dailyForecasts = getDailySummary(forecastByDay);
+  displayForecast(dailyForecasts);
+}
+
+//handling error
+
+const toastContainer = document.getElementById("toast-container");
+
+function showToast(message, duration = 3000) {
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerText = message;
+
+  toastContainer.appendChild(toast);
+
+  // Show toast
+  setTimeout(() => toast.classList.add("show"), 100);
+
+  // Hide toast after duration
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 500); // remove from DOM after fade
+  }, duration);
 }

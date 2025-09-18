@@ -49,3 +49,10 @@ html {
   flex: 0 0 auto;
   width: 160px;
 }
+
+.toast {
+  @apply bg-red-500 text-white px-4 py-2 rounded shadow-lg mb-2 opacity-0 transition-opacity duration-500;
+}
+.toast.show {
+  @apply opacity-100;
+}
