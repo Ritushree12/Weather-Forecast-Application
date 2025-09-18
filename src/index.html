@@ -58,29 +58,29 @@
         </div>
 
         <!-- Right Panel (Results) -->
-        <div class="hidden result-container flex-col flex-1 overflow-y-auto">
+        <div class="hidden result-container w-full md:w-2/3 lg:w-3/4 px-2 md:px-4 py-4 flex-col flex-1 overflow-y-auto">
             <div class="basic-weather flex-1 flex justify-center items-start">
-                <div id="bg-container"
-                    class="relative h-[50vh] shadow-xl w-full max-w-[600px] m-4 rounded-md bg-cover bg-center transition-all duration-500 p-6 sm:p-8">
+                <div id="bg-container" class="relative h-[50vh] sm:h-[55vh] md:h-[60vh]
+ shadow-xl w-full max-w-[600px] m-4 rounded-md bg-cover bg-center transition-all duration-500 p-6 sm:p-8">
 
                     <!-- Overlay -->
                     <div id="overlay" class="hidden overlay absolute inset-0 bg-slate-900/60 rounded-md"></div>
 
                     <!-- Weather Info -->
                     <div class="relative z-10 text-slate-100 flex flex-col space-y-2">
-                        <h1 class="text-4xl sm:text-5xl font-bold text-blue-200" id="city-name"></h1>
-                        <h3 class="text-2xl sm:text-3xl font-bold mt-2 text-blue-100" id="weather-desc"></h3>
-                        <h5 class="text-lg sm:text-2xl" id="temp"></h5>
-                        <h5 class="text-lg sm:text-2xl" id="min-temp"></h5>
-                        <h5 class="text-lg sm:text-2xl" id="max-temp"></h5>
-                        <h5 class="text-lg sm:text-2xl" id="humidity"></h5>
-                        <h5 class="text-lg sm:text-2xl" id="pressure"></h5>
+                        <h1 class="text-3xl sm:text-4xl md:text-5xlfont-bold text-blue-200" id="city-name"></h1>
+                        <h3 class="text-xl sm:text-2xl md:text-3xl font-bold mt-2 text-blue-100" id="weather-desc"></h3>
+                        <h5 class="text-sm sm:text-lg md:text-xl" id="temp"></h5>
+                        <h5 class="text-sm sm:text-lg md:text-xl" id="min-temp"></h5>
+                        <h5 class="text-sm sm:text-lg md:text-xl" id="max-temp"></h5>
+                        <h5 class="text-sm sm:text-lg md:text-xl" id="humidity"></h5>
+                        <h5 class="text-sm sm:text-lg md:text-xl" id="pressure"></h5>
 
                         <!-- Unit Toggle -->
                         <div id="unit-toggle" class="hidden m-0 unit-toggle items-center space-x-2 mt-4 z-20">
-                            <button id="celsius-btn" class="px-4 py-2 bg-blue-600 text-white rounded-full">°C</button>
+                            <button id="celsius-btn" class="px-3 sm:px-4 py-1 sm:py-2 bg-blue-600 text-white rounded-full">°C</button>
                             <button id="fahrenheit-btn"
-                                class="px-4 py-2 bg-gray-200 text-gray-800 rounded-full">°F</button>
+                                class="px-3 sm:px-4 py-1 sm:py-2 bg-gray-200 text-gray-800 rounded-full">°F</button>
                         </div>
                         <!--Alert Messages-->
                         <div id="weather-alert" class="hidden border-l-4 p-4 mt-4" role="alert">
@@ -91,10 +91,8 @@
                 </div>
             </div>
 
-            <div id="forecast-container" class="hidden flex pb-10 flex-wrap gap-4 justify-center p-4 
-                    max-h-none sm:max-h-[700px] md:max-h-[800px] lg:max-h-[900px]">
-                <!-- <h1 class="text-4xl text-center text-white " style="text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.6);">
-                    Forecast for 5 days:</h1> -->
+            <div id="forecast-container" class="hidden flex pb-10 flex-wrap gap-4 justify-center
+                    max-h-none sm:max-h-[700px] md:max-h-[800px] lg:max-h-[900px] p-2 sm:p-4 w-full">
 
             </div>
         </div>
