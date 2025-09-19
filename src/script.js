@@ -104,6 +104,7 @@ function getWeather(CITY_NAME) {
     overlay.classList.add("hidden");
     unitToggle.classList.add("hidden");
     container.classList.add("hidden");
+    document.body.style.overflowY = "hidden";
 
     return;
   }
@@ -118,7 +119,7 @@ function getWeather(CITY_NAME) {
         overlay.classList.add("hidden");
         unitToggle.classList.add("hidden");
         container.classList.add("hidden");
-
+        document.body.style.overflowY = "hidden";
         errorMsg.style.visibility = "visible";
         errorMsg.innerText = "City not found! Please check the spelling.";
         showToast("City not found! Please check the spelling.");
@@ -133,6 +134,7 @@ function getWeather(CITY_NAME) {
       unitToggle.classList.add("flex");
       container.classList.remove("hidden");
       container.classList.add("flex");
+      document.body.style.overflowY = "auto";
 
       cityNameAsResult.innerText = data.name.toUpperCase();
 
@@ -174,6 +176,7 @@ function getWeather(CITY_NAME) {
       overlay.classList.add("hidden");
       unitToggle.classList.add("hidden");
       container.classList.add("hidden");
+      document.body.style.overflowY = "hidden";
 
       errorMsg.innerText =
         "Unable to fetch the weather currently. Please try again later.";
@@ -250,7 +253,9 @@ function getWeatherByCoords(lat, lon) {
     .then((res) => res.json())
     .then((data) => {
       if (data.cod === 404) {
+        document.body.style.overflowY = "hidden";
         showToast("City not found! Please check the spelling.");
+
         return;
       }
 
@@ -265,6 +270,7 @@ function getWeatherByCoords(lat, lon) {
       unitToggle.classList.add("flex");
       container.classList.remove("hidden");
       container.classList.add("flex");
+      document.body.style.overflowY = "auto";
 
       cityNameAsResult.innerText = data.name.toUpperCase();
 
@@ -294,7 +300,7 @@ function getWeatherByCoords(lat, lon) {
       errorMsg.style.visibility = "visible";
       resultContainer.classList.add("hidden");
       resultContainer.style.display = "none";
-
+      document.body.style.overflowY = "hidden";
       overlay.classList.add("hidden");
       unitToggle.classList.add("hidden");
       container.classList.add("hidden");
@@ -371,6 +377,7 @@ searchBtn.addEventListener("click", function () {
     overlay.classList.add("hidden");
     unitToggle.classList.add("hidden");
     container.classList.add("hidden");
+    document.body.style.overflowY = "hidden";
     return; // stop execution
   }
 
@@ -400,6 +407,7 @@ inputCity.addEventListener("keydown", function (event) {
       overlay.classList.add("hidden");
       unitToggle.classList.add("hidden");
       container.classList.add("hidden");
+      document.body.style.overflowY = "hidden";
       return;
     }
 
@@ -578,7 +586,7 @@ function displayForecast(dailyForecasts) {
       "hover:scale-105",
       "hover:shadow-xl"
     );
-
+    document.body.style.overflowY = "auto";
     container.appendChild(card);
   });
 }
@@ -639,6 +647,7 @@ function getDailySummary(forecastByDay) {
 async function showForecast() {
   const forecastByDay = await getForecast();
   const dailyForecasts = getDailySummary(forecastByDay);
+  document.body.style.overflowY = "auto";
   displayForecast(dailyForecasts);
 }
 
