@@ -33,8 +33,14 @@
                 <!-- City Input -->
                 <div class="relative w-full">
                     <label for="city" class="text-2xl italic p-2 text-slate-700 font-extrabold">Enter City</label>
-                    <input type="text" placeholder="🔍 Enter city name" autocomplete="off" id="city" class="city-input mt-2 mb-2 rounded-md border-2 border-slate-400 p-2 bg-slate-50 italic w-full 
-                   focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition">
+                    <div class="flex items-stretch w-full mt-2 mb-2">
+                        <input type="text" placeholder="Enter city name" autocomplete="off" id="city" class="city-input rounded-l-md border-2 border-slate-400 p-2 bg-slate-50 italic w-full 
+           focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition">
+                        <button id="search-btn"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition flex items-center justify-center">
+                            🔍
+                        </button>
+                    </div>
 
                     <!-- Dropdown for recent cities -->
                     <ul id="recent-cities"

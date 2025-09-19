@@ -161,7 +161,7 @@ function getWeather(CITY_NAME) {
         saveCity(data.name);
       }
       checkWeatherAlert(data.main.temp);
-      inputCity.value = ""; // clear input only on success
+      // inputCity.value = ""; // clear input only on success
       dropdown.style.display = "none";
       errorMsg.style.visibility = "hidden";
     })
@@ -233,7 +233,7 @@ currentLocation.addEventListener("click", function () {
     container.classList.add("flex");
 
     errorMsg.style.visibility = "hidden";
-    inputCity.value = ""; // Clear input field
+    // inputCity.value = ""; // Clear input field
 
     navigator.geolocation.getCurrentPosition(
       (pos) => getWeatherByCoords(pos.coords.latitude, pos.coords.longitude),
@@ -254,7 +254,7 @@ function getWeatherByCoords(lat, lon) {
         return;
       }
 
-      inputCity.value = ""; // Clear input field
+      //   inputCity.value = ""; // Clear input field
       dropdown.style.display = "none";
       errorMsg.style.visibility = "hidden";
       // resultContainer.style.visibility = "visible";
@@ -355,12 +355,14 @@ function renderDropdown() {
   dropdown.style.display = "block";
 }
 
-// Hook into your input event
-inputCity.addEventListener("change", function () {
+const searchBtn = document.getElementById("search-btn");
+
+searchBtn.addEventListener("click", function () {
   const city = inputCity.value.trim(); // remove extra spaces
   CITY_NAME = city;
   currentCitySelected = false;
-  if (!city || city.length === 0 || city === "") {
+
+  if (!city || city.length === 0) {
     errorMsg.style.visibility = "visible";
     errorMsg.innerText = "Please enter a city name!";
     showToast("Please enter a city name!");
