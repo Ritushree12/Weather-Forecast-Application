@@ -227,6 +227,7 @@ const currentLocation = document.querySelector(".current-location");
 currentLocation.addEventListener("click", function () {
   if (navigator.geolocation) {
     currentCitySelected = true;
+    inputCity.value = "";
     resultContainer.classList.remove("hidden");
     resultContainer.style.display = "flex";
     overlay.classList.remove("hidden");
