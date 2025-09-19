@@ -408,6 +408,8 @@ inputCity.addEventListener("keydown", function (event) {
       unitToggle.classList.add("hidden");
       container.classList.add("hidden");
       document.body.style.overflowY = "hidden";
+      resultContainer.classList.add("hidden");
+      resultContainer.style.display = "none";
       return;
     }
 
